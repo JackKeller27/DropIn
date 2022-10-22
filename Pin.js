@@ -2,11 +2,11 @@ import React, { useState, useEffect } from 'react';
 import { StyleSheet, View, Image, Text } from 'react-native';
 
 export default function Pin() {
-    const [latitude, longitude, host] = useState(0);
+    // const [latitude, longitude, host] = useState(0);
 
-    useEffect(() => {
-        //update states here
-    });
+    // useEffect(() => {
+    //     //update states here
+    // });
 
     return (
         <View style={styles.container}>
