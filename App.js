@@ -10,10 +10,13 @@ import { PROVIDER_GOOGLE } from 'react-native-maps';
 function HomeScreen({ navigation }) {
   return (
     <View style={styles.view}>
-      <Image source={require('./assets/logo_actual.png')} style={styles.image} />
-      <Pressable style={styles.button} onPress={() => navigation.navigate('Login')}>
-        <Text style={styles.buttonText}>Login</Text>
-      </Pressable>
+      <Image source={require('./assets/logo_ss.png')} style={styles.image} />
+    <Pressable style={styles.button} onPress={() => navigation.navigate('Login')}>
+      <Text style={styles.buttonText}>Login</Text>
+    </Pressable>
+    <Pressable style={styles.buttonSignUp} onPress={() => navigation.navigate('Login')}>
+      <Text style={styles.buttonTextSignUp}>Sign Up</Text>
+    </Pressable>
     </View>
   );
 }
@@ -177,6 +180,40 @@ const styles = StyleSheet.create({
     letterSpacing: 0.25,
     color: 'white',
   },
+button: {
+  alignItems: 'center',
+  justifyContent: 'center',
+  paddingVertical: '3%',
+  marginTop: '4%',
+  width: '60%',
+  borderRadius: 40,
+  elevation: 20,
+  backgroundColor: 'white',
+},
+buttonSignUp: {
+  alignItems: 'center',
+  justifyContent: 'center',
+  paddingVertical: '3%',
+  marginTop: '4%',
+  width: '60%',
+  borderRadius: 40,
+  elevation: 20,
+  backgroundColor: 'black',
+},
+buttonText: {
+  fontSize: 16,
+  lineHeight: 28,
+  fontWeight: 'bold',
+  letterSpacing: 0.21,
+  color: 'black',
+},
+buttonTextSignUp: {
+  fontSize: 16,
+  lineHeight: 28,
+  fontWeight: 'bold',
+  letterSpacing: 0.21,
+  color: 'white',
+},
 })
 
 export default App;
