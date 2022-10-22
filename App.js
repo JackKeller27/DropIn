@@ -11,9 +11,9 @@ function HomeScreen({ navigation }) {
   return (
     <View style={styles.view}>
       <Image source={require('./assets/logo_actual.png')} style={styles.image} />
-    <Pressable style={styles.button} onPress={() => navigation.navigate('Login')}>
-      <Text style={styles.buttonText}>Login</Text>
-    </Pressable>
+      <Pressable style={styles.button} onPress={() => navigation.navigate('Login')}>
+        <Text style={styles.buttonText}>Login</Text>
+      </Pressable>
     </View>
   );
 }
@@ -71,16 +71,14 @@ function MapScreen({ navigation }) {
       />
       <View
         style={{
-          position: 'absolute',//use absolute position to show button on top of the map
-          top: '7%', //for center align
-          alignSelf: 'flex-start' //for align to right
+          position: 'absolute', //fix button position
+          top: '7%',
+          alignSelf: 'flex-start'
         }}
       >
-        <Button
-          title="Back"
-          color="red"
-          onPress={() => navigation.goBack()}
-        />
+        <Pressable style={styles.backButton} onPress={() => navigation.goBack()}>
+          <Text style={styles.buttonText}>Back</Text>
+        </Pressable>
       </View>
     </View>
   );
@@ -152,23 +150,33 @@ const styles = StyleSheet.create({
     width: '50%',
     height: '50%',
     aspectRatio: 1,
-},
-button: {
-  alignItems: 'center',
-  justifyContent: 'center',
-  paddingVertical: 12,
-  paddingHorizontal: 32,
-  borderRadius: 4,
-  elevation: 3,
-  backgroundColor: 'black',
-},
-buttonText: {
-  fontSize: 16,
-  lineHeight: 21,
-  fontWeight: 'bold',
-  letterSpacing: 0.25,
-  color: 'white',
-},
+  },
+  button: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingVertical: 12,
+    paddingHorizontal: 32,
+    borderRadius: 4,
+    elevation: 3,
+    backgroundColor: 'black',
+  },
+  backButton: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingVertical: 6,
+    paddingHorizontal: 16,
+    marginLeft: 8,
+    borderRadius: 4,
+    elevation: 3,
+    backgroundColor: 'red',
+  },
+  buttonText: {
+    fontSize: 16,
+    lineHeight: 21,
+    fontWeight: 'bold',
+    letterSpacing: 0.25,
+    color: 'white',
+  },
 })
 
 export default App;
