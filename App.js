@@ -95,7 +95,7 @@ function MapScreen({ navigation }) {
         }}
       >
         <Pressable style={styles.backButton} onPress={() => navigation.goBack()}>
-          <Text style={styles.buttonText}>Back</Text>
+          <Text style={styles.backButtonText}>Back</Text>
         </Pressable>
       </View>
     </View>
@@ -186,9 +186,9 @@ const styles = StyleSheet.create({
     marginLeft: 8,
     borderRadius: 4,
     elevation: 3,
-    backgroundColor: 'red',
+    backgroundColor: 'black',
   },
-  buttonText: {
+  backButtonText: {
     fontSize: 16,
     lineHeight: 21,
     fontWeight: 'bold',
