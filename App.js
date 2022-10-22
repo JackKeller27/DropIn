@@ -3,7 +3,9 @@ import { Button, Text, View, StyleSheet, TextInput, Dimensions, Image, Pressable
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import MapView from 'react-native-maps';
+import { Marker } from 'react-native-maps';
 import { PROVIDER_GOOGLE } from 'react-native-maps';
+import Pin from './Pin.js';
 
 //Home Screen
 
@@ -60,21 +62,34 @@ function LoginScreen({ navigation }) {
 //Map Screen
 
 function MapScreen({ navigation }) {
+  // const pin = { //retrieve states from Pin.js
+  //   latitude: Pin.latitude,
+  //   longitude: Pin.longitude,
+  // }
+
+  const culcLocation = {
+    latitude: 33.7749,
+    longitude: -84.3964,
+    latitudeDelta: 0.01,
+    longitudeDelta: 0.01,
+  }
+
   return (
     <View style={styles.container}>
       <MapView
         style={styles.map}
         provider={PROVIDER_GOOGLE}
-        initialRegion={{ //initial coordinates set to CULC
-          latitude: 33.7749,
-          longitude: -84.3964,
-          latitudeDelta: 0.01,
-          longitudeDelta: 0.01,
-        }}
-      />
+        initialRegion={ culcLocation } //initial map location set to CULC
+      >
+
+        <Marker coordinate={ culcLocation } >
+          <Pin />
+        </Marker>
+
+      </MapView>
       <View
         style={{
-          position: 'absolute', //fix button position
+          position: 'absolute', //maintain absolute button position
           top: '7%',
           alignSelf: 'flex-start'
         }}
