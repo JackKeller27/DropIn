@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Button, Text, View, StyleSheet, TextInput, Dimensions } from 'react-native';
+import { Button, Text, View, StyleSheet, TextInput, Dimensions, Image } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import MapView from 'react-native-maps';
@@ -10,8 +10,7 @@ import { PROVIDER_GOOGLE } from 'react-native-maps';
 function HomeScreen({ navigation }) {
   return (
     <View style={styles.view}>
-      <Text style={styles.titleText}>DropIn.</Text>
-
+      <Image source={require('./assets/logo_actual.png')} style={styles.image} />
       <Button
         title="Login"
         color="white"
@@ -74,7 +73,11 @@ const Stack = createNativeStackNavigator();
 function App() {
   return (
     <NavigationContainer>
-      <Stack.Navigator initialRouteName="Home">
+      <Stack.Navigator initialRouteName="Home"
+        screenOptions={{
+          headerShown: false
+        }}
+      >
         <Stack.Screen name="Home" component={HomeScreen} />
         <Stack.Screen name="Login" component={LoginScreen} />
         <Stack.Screen name="Map" component={MapScreen} />
@@ -127,6 +130,11 @@ const styles = StyleSheet.create({
     height: Dimensions.get('window').height,
     provider: PROVIDER_GOOGLE,
   },
+  image: {
+    width: '50%',
+    height: '50%',
+    aspectRatio: 1,
+},
 })
 
 export default App;
