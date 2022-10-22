@@ -62,9 +62,9 @@ function LoginScreen({ navigation }) {
 function MapScreen({ navigation }) {
   return (
     <View style={styles.container}>
-      <MapView 
-        style={styles.map} 
-        provider={PROVIDER_GOOGLE} 
+      <MapView
+        style={styles.map}
+        provider={PROVIDER_GOOGLE}
         initialRegion={{ //initial coordinates set to CULC
           latitude: 33.7749,
           longitude: -84.3964,
@@ -72,6 +72,19 @@ function MapScreen({ navigation }) {
           longitudeDelta: 0.01,
         }}
       />
+      <View
+        style={{
+          position: 'absolute',//use absolute position to show button on top of the map
+          top: '7%', //for center align
+          alignSelf: 'flex-start' //for align to right
+        }}
+      >
+        <Button
+          title="Back"
+          color="red"
+          onPress={() => navigation.goBack()}
+        />
+      </View>
     </View>
   );
 }
@@ -142,7 +155,7 @@ const styles = StyleSheet.create({
     width: '50%',
     height: '50%',
     aspectRatio: 1,
-},
+  },
 })
 
 export default App;
