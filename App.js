@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Button, Text, View, StyleSheet, TextInput, Dimensions, Image } from 'react-native';
+import { Button, Text, View, StyleSheet, TextInput, Dimensions, Image, Pressable } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import MapView from 'react-native-maps';
@@ -11,12 +11,9 @@ function HomeScreen({ navigation }) {
   return (
     <View style={styles.view}>
       <Image source={require('./assets/logo_actual.png')} style={styles.image} />
-      <Button
-        title="Login"
-        color="white"
-        onPress={() => navigation.navigate('Login')}
-      />
-
+    <Pressable style={styles.button} onPress={() => navigation.navigate('Login')}>
+      <Text style={styles.buttonText}>Login</Text>
+    </Pressable>
     </View>
   );
 }
@@ -142,6 +139,22 @@ const styles = StyleSheet.create({
     width: '50%',
     height: '50%',
     aspectRatio: 1,
+},
+button: {
+  alignItems: 'center',
+  justifyContent: 'center',
+  paddingVertical: 12,
+  paddingHorizontal: 32,
+  borderRadius: 4,
+  elevation: 3,
+  backgroundColor: 'black',
+},
+buttonText: {
+  fontSize: 16,
+  lineHeight: 21,
+  fontWeight: 'bold',
+  letterSpacing: 0.25,
+  color: 'white',
 },
 })
 
