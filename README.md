@@ -1,4 +1,4 @@
 # DropIn
 
-HackGT9 Project
-/n By Jack Keller, Dhruv Shah
+HackGT9 Project\
+By Jack Keller, Dhruv Shah
