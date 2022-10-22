@@ -62,10 +62,13 @@ function LoginScreen({ navigation }) {
 //Map Screen
 
 function MapScreen({ navigation }) {
-  // const pin = { //retrieve states from Pin.js
-  //   latitude: Pin.latitude,
-  //   longitude: Pin.longitude,
-  // }
+  // const [pinCoord, setPinCoord] = React.useState(0);
+
+  const pin = { //retrieve states from Pin.js
+    // latitude: Pin.latitude,
+    // longitude: Pin.longitude,
+
+  }
 
   const culcLocation = {
     latitude: 33.7749,
@@ -80,9 +83,10 @@ function MapScreen({ navigation }) {
         style={styles.map}
         provider={PROVIDER_GOOGLE}
         initialRegion={ culcLocation } //initial map location set to CULC
-      >
+        // onPress={(e) => setPinCoord(e.nativeEvent.coordinate)}
+      > 
 
-        <Marker coordinate={ culcLocation } >
+        <Marker coordinate={ culcLocation }>
           <Pin />
         </Marker>
 
@@ -95,7 +99,18 @@ function MapScreen({ navigation }) {
         }}
       >
         <Pressable style={styles.backButton} onPress={() => navigation.goBack()}>
-          <Text style={styles.backButtonText}>Back</Text>
+          <Text style={styles.mapButtonText}>Back</Text>
+        </Pressable>
+      </View>
+      <View
+        style={{
+          position: 'absolute', //maintain absolute button position
+          top: '80%',
+          alignSelf: 'flex-end'
+        }}
+      >
+      <Pressable style={styles.buttonPlacePin} onPress={() => alert("place pin")}>
+          <Text style={styles.mapButtonText}>Place Pin</Text>
         </Pressable>
       </View>
     </View>
@@ -183,12 +198,22 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     paddingVertical: 6,
     paddingHorizontal: 16,
-    marginLeft: 8,
+    marginLeft: '8%',
     borderRadius: 4,
     elevation: 3,
     backgroundColor: 'black',
   },
-  backButtonText: {
+  buttonPlacePin: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingVertical: 6,
+    paddingHorizontal: 16,
+    marginRight: '8%',
+    borderRadius: 4,
+    elevation: 3,
+    backgroundColor: 'teal',
+  },
+  mapButtonText: {
     fontSize: 16,
     lineHeight: 21,
     fontWeight: 'bold',
