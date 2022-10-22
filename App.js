@@ -3,7 +3,9 @@ import { Button, Text, View, StyleSheet, TextInput, Dimensions, Image, Pressable
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import MapView from 'react-native-maps';
+import { Marker } from 'react-native-maps';
 import { PROVIDER_GOOGLE } from 'react-native-maps';
+import Pin from './Pin.js';
 import mapStyle from './mapStyle.json'
 
 //Home Screen
@@ -88,28 +90,63 @@ function SignupScreen({ navigation }) {
 //Map Screen
 
 function MapScreen({ navigation }) {
+  // const [pinCoord, setPinCoord] = React.useState(0);
+  const [pins, setPins] = React.useState([]);
+  const [isPressed, setIsPressed] = React.useState(false);
+
+  // const pin = {
+  //   coordinates: pinCoord
+  // }
+
+  const culcLocation = {
+    latitude: 33.7749,
+    longitude: -84.3964,
+    latitudeDelta: 0.01,
+    longitudeDelta: 0.01,
+  }
+
+  const dropPin = (e) => { //handles dropping a pin
+    if (isPressed) {
+      setPins([...pins, e.nativeEvent.coordinate])
+      setIsPressed(false);
+    }
+  }
+
   return (
     <View style={styles.container}>
       <MapView
         style={styles.map}
         provider={PROVIDER_GOOGLE}
-        initialRegion={{ //initial coordinates set to CULC
-          latitude: 33.7749,
-          longitude: -84.3964,
-          latitudeDelta: 0.01,
-          longitudeDelta: 0.01,
-        }}
+        initialRegion={culcLocation} //initial map location set to CULC
+        onPress={(e) => dropPin(e)}
         customMapStyle={mapStyle}
-      />
+      >
+        {
+          pins.map((pin, i) => (<Marker coordinate={pin} key={i}>
+            <Pin />
+          </Marker>))
+        }
+      </MapView>
       <View
         style={{
-          position: 'absolute', //fix button position
+          position: 'absolute', //maintain absolute button position
           top: '7%',
           alignSelf: 'flex-start'
         }}
       >
         <Pressable style={styles.backButton} onPress={() => navigation.goBack()}>
-          <Text style={styles.buttonText}>Back</Text>
+          <Text style={styles.mapButtonText}>Back</Text>
+        </Pressable>
+      </View>
+      <View
+        style={{
+          position: 'absolute', //maintain absolute button position
+          top: '90%',
+          alignSelf: 'flex-end'
+        }}
+      >
+        <Pressable style={styles.buttonPlacePin} onPress={() => setIsPressed(true)}>
+          <Text style={styles.mapButtonText}>Place Pin</Text>
         </Pressable>
       </View>
     </View>
@@ -200,52 +237,62 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     paddingVertical: 6,
     paddingHorizontal: 16,
-    marginLeft: 8,
+    marginLeft: '8%',
     borderRadius: 4,
     elevation: 3,
-    backgroundColor: 'red',
+    backgroundColor: 'black',
   },
-  buttonText: {
+  buttonPlacePin: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingVertical: 6,
+    paddingHorizontal: 16,
+    marginRight: '8%',
+    borderRadius: 4,
+    elevation: 3,
+    backgroundColor: 'teal',
+  },
+  mapButtonText: {
     fontSize: 16,
     lineHeight: 21,
     fontWeight: 'bold',
     letterSpacing: 0.25,
     color: 'white',
   },
-button: {
-  alignItems: 'center',
-  justifyContent: 'center',
-  paddingVertical: '3%',
-  marginTop: '4%',
-  width: '60%',
-  borderRadius: 40,
-  elevation: 20,
-  backgroundColor: 'white',
-},
-buttonSignUp: {
-  alignItems: 'center',
-  justifyContent: 'center',
-  paddingVertical: '3%',
-  marginTop: '4%',
-  width: '60%',
-  borderRadius: 40,
-  elevation: 20,
-  backgroundColor: 'black',
-},
-buttonText: {
-  fontSize: 16,
-  lineHeight: 28,
-  fontWeight: 'bold',
-  letterSpacing: 0.21,
-  color: 'black',
-},
-buttonTextSignUp: {
-  fontSize: 16,
-  lineHeight: 28,
-  fontWeight: 'bold',
-  letterSpacing: 0.21,
-  color: 'white',
-},
+  button: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingVertical: '3%',
+    marginTop: '4%',
+    width: '60%',
+    borderRadius: 40,
+    elevation: 20,
+    backgroundColor: 'white',
+  },
+  buttonSignUp: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingVertical: '3%',
+    marginTop: '4%',
+    width: '60%',
+    borderRadius: 40,
+    elevation: 20,
+    backgroundColor: 'black',
+  },
+  buttonText: {
+    fontSize: 16,
+    lineHeight: 28,
+    fontWeight: 'bold',
+    letterSpacing: 0.21,
+    color: 'black',
+  },
+  buttonTextSignUp: {
+    fontSize: 16,
+    lineHeight: 28,
+    fontWeight: 'bold',
+    letterSpacing: 0.21,
+    color: 'white',
+  },
 })
 
 export default App;
