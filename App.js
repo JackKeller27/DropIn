@@ -14,7 +14,7 @@ function HomeScreen({ navigation }) {
     <Pressable style={styles.button} onPress={() => navigation.navigate('Login')}>
       <Text style={styles.buttonText}>Login</Text>
     </Pressable>
-    <Pressable style={styles.buttonSignUp} onPress={() => navigation.navigate('Login')}>
+    <Pressable style={styles.buttonSignUp} onPress={() => navigation.navigate('Signup')}>
       <Text style={styles.buttonTextSignUp}>Sign Up</Text>
     </Pressable>
     </View>
@@ -31,7 +31,7 @@ function LoginScreen({ navigation }) {
     <View
       style={styles.login}>
 
-      <Text style={styles.titleText}>Login</Text>
+      <Text style={styles.titleText}>Gatekeepin' Shuvs.</Text>
 
       <TextInput
         style={styles.input}
@@ -47,12 +47,39 @@ function LoginScreen({ navigation }) {
         placeholder="Password"
         secureTextEntry={true}
       />
+    <Pressable style={styles.buttonSignUp} onPress={() => navigation.navigate('Map')}>
+      <Text style={styles.buttonTextSignUp}>Let's Ride</Text>
+    </Pressable>
+    </View>
+  );
+}
 
-      <Button
-        title="Submit"
-        color="white"
-        onPress={() => navigation.navigate('Map')}
+function SignupScreen({ navigation }) {
+  const [username, onChangeTextUsr] = React.useState(null);
+  const [password, onChangeTextPsw] = React.useState(null);
+
+  return (
+    <View
+      style={styles.login}>
+
+      <Text style={styles.titleText}>Join the fam :)</Text>
+
+      <TextInput
+        style={styles.input}
+        onChangeText={onChangeTextUsr}
+        value={username}
+        placeholder="Username"
       />
+        <TextInput
+        style={styles.input}
+        onChangeText={onChangeTextPsw}
+        value={password}
+        placeholder="Password"
+        secureTextEntry ={true}
+      />
+    <Pressable style={styles.buttonSignUp} onPress={() => navigation.navigate('Map')}>
+      <Text style={styles.buttonTextSignUp}>Drop In!</Text>
+    </Pressable>
     </View>
   );
 }
@@ -100,6 +127,7 @@ function App() {
       >
         <Stack.Screen name="Home" component={HomeScreen} />
         <Stack.Screen name="Login" component={LoginScreen} />
+        <Stack.Screen name="Signup" component={SignupScreen} />
         <Stack.Screen name="Map" component={MapScreen} />
       </Stack.Navigator>
     </NavigationContainer>
@@ -124,18 +152,20 @@ const styles = StyleSheet.create({
   },
 
   input: {
-    height: 40,
-    margin: 6,
-    borderWidth: 1,
-    padding: 10,
+    height: '7%',
+    width: '68%',
+    margin: '4%',
+    borderWidth: 3,
+    borderRadius: 21,
+    padding: 15,
     fontSize: 15,
     backgroundColor: "white"
   },
 
   titleText: {
-    fontSize: 25,
+    fontSize: 40,
     fontWeight: "bold",
-    marginTop: 25
+    marginTop: '21%'
   },
 
   container: {
