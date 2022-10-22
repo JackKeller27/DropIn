@@ -1,7 +1,9 @@
 import * as React from 'react';
-import { Button, Text, View, StyleSheet, TextInput } from 'react-native';
+import { Button, Text, View, StyleSheet, TextInput, Dimensions } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import MapView from 'react-native-maps';
+import { PROVIDER_GOOGLE } from 'react-native-maps';
 
 //Home Screen
 
@@ -48,7 +50,7 @@ function LoginScreen({ navigation }) {
       />
 
       <Button
-        title="Temp"
+        title="Submit"
         color="white"
         onPress={() => navigation.navigate('Map')}
       />
@@ -60,7 +62,9 @@ function LoginScreen({ navigation }) {
 
 function MapScreen({ navigation }) {
   return (
-    <View></View>
+    <View style={styles.container}>
+      <MapView style={styles.map} />
+    </View>
   );
 }
 
@@ -111,8 +115,17 @@ const styles = StyleSheet.create({
     marginTop: 25
   },
 
-  baseText: {
+  container: {
+    flex: 1,
+    backgroundColor: '#fff',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
 
+  map: {
+    width: Dimensions.get('window').width,
+    height: Dimensions.get('window').height,
+    provider: PROVIDER_GOOGLE,
   },
 })
 
