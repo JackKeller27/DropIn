@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { useState } from 'react';
 import { Button, Text, View, StyleSheet, TextInput, Dimensions } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
@@ -63,7 +64,16 @@ function LoginScreen({ navigation }) {
 function MapScreen({ navigation }) {
   return (
     <View style={styles.container}>
-      <MapView style={styles.map} />
+      <MapView 
+        style={styles.map} 
+        provider={PROVIDER_GOOGLE} 
+        initialRegion={{ //initial coordinates set to CULC
+          latitude: 33.7749,
+          longitude: -84.3964,
+          latitudeDelta: 0.01,
+          longitudeDelta: 0.01,
+        }}
+      />
     </View>
   );
 }
@@ -125,7 +135,6 @@ const styles = StyleSheet.create({
   map: {
     width: Dimensions.get('window').width,
     height: Dimensions.get('window').height,
-    provider: PROVIDER_GOOGLE,
   },
 })
 
