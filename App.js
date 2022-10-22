@@ -63,7 +63,7 @@ function LoginScreen({ navigation }) {
 function MapScreen({ navigation }) {
   return (
     <View style={styles.container}>
-      <MapView style={styles.map} />
+      <MapView style={styles.map} provider={PROVIDER_GOOGLE} />
     </View>
   );
 }
@@ -125,7 +125,6 @@ const styles = StyleSheet.create({
   map: {
     width: Dimensions.get('window').width,
     height: Dimensions.get('window').height,
-    provider: PROVIDER_GOOGLE,
   },
 })
 
