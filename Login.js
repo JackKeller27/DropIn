@@ -1,7 +1,7 @@
 import React from 'react';
 import { StyleSheet, TextInput, Header, View } from 'react-native';
 
-const Login = () => {
+const Login = ({ navigation }) => {
     const [text, onChangeText] = React.useState(null);
 
     return (
@@ -41,6 +41,6 @@ const styles = StyleSheet.create({
         borderWidth: 1,
         padding: 10,
     },
-});
+})
 
 export default Login;
