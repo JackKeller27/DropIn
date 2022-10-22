@@ -4,6 +4,7 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import MapView from 'react-native-maps';
 import { PROVIDER_GOOGLE } from 'react-native-maps';
+import mapStyle from './mapStyle.json'
 
 //Home Screen
 
@@ -98,6 +99,7 @@ function MapScreen({ navigation }) {
           latitudeDelta: 0.01,
           longitudeDelta: 0.01,
         }}
+        customMapStyle={mapStyle}
       />
       <View
         style={{
