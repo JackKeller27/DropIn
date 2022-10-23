@@ -262,10 +262,6 @@ matplotlib-inline
 mccabe
 
 
-mkl-fft
-mkl-random 
-
-mkl-service
 mock 
 
 mpmath
