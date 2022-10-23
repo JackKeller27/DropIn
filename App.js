@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Button, Text, View, StyleSheet, TextInput, Dimensions, Image, Pressable, Modal } from 'react-native';
+import { Text, View, StyleSheet, TextInput, Dimensions, Image, Pressable, Modal } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import MapView from 'react-native-maps';
@@ -26,16 +26,15 @@ function HomeScreen({ navigation }) {
 }
 
 //Login Screen
-//**implement POST request, change onPress
 
 function LoginScreen({ navigation }) {
   const [username, onChangeTextUsr] = React.useState(null);
   const [password, onChangeTextPsw] = React.useState(null);
   const [isValid, setIsValid] = React.useState("False");
 
-  const login = () => {
+  const login = async () => {
     //POST request
-    fetch('https://mywebsite.com/endpoint/', { //IMPORTANT edit this link
+    const response = await fetch('https://dropin-skateapp.herokuapp.com/login', {
       method: 'POST',
       headers: {
         Accept: 'application/json',
@@ -46,29 +45,19 @@ function LoginScreen({ navigation }) {
         Password: { password }
       })
     });
-
-    if (isValid === "True") {
-      navigation.navigate('Map')
-    } else {
-      alert("Username/password does not exist!");
+    if (response.ok) {
+      let text = await response.json()
+      if (text.Value === "True") {
+        navigation.navigate('Map')
+      } else {
+        alert(text.Value)
+      }
     }
   }
 
-  //await fetch
-  const verifyUser = async () => {
-    try {
-      const response = await fetch(
-        'https://reactnative.dev/movies.json' //IMPORTANT edit this link
-      );
-      setIsValid(response);
-    } catch (error) {
-      console.error(error);
-    }
-  };
-
-  React.useEffect(() => {
-    verifyUser();
-  });
+  // React.useEffect(() => {
+  //   verifyUser();
+  // });
 
   return (
     <View
@@ -90,8 +79,8 @@ function LoginScreen({ navigation }) {
         placeholder="Password"
         secureTextEntry={true}
       />
-      {/* <Pressable style={styles.buttonSignUp} onPress={() => login()}> */}
-      <Pressable style={styles.buttonSignUp} onPress={() => navigation.navigate('Map')}>
+      <Pressable style={styles.buttonSignUp} onPress={() => login()}>
+      {/* <Pressable style={styles.buttonSignUp} onPress={() => navigation.navigate('Map')}> */}
         <Text style={styles.buttonTextSignUp}>Let's Ride</Text>
       </Pressable>
     </View>
@@ -99,15 +88,14 @@ function LoginScreen({ navigation }) {
 }
 
 //Signup Screen
-//**implement POST request
 
 function SignupScreen({ navigation }) {
   const [username, onChangeTextUsr] = React.useState(null);
   const [password, onChangeTextPsw] = React.useState(null);
 
   const signup = () => {
-    //POST request
-    fetch('https://mywebsite.com/endpoint/', { //IMPORTANT edit this link
+    //POST username and password to DB
+    fetch('https://dropin-skateapp.herokuapp.com/signup', {
       method: 'POST',
       headers: {
         Accept: 'application/json',
@@ -150,29 +138,35 @@ function SignupScreen({ navigation }) {
 }
 
 //Map Screen
-//**implement fetch request
+//implement integrating pins with DB, attaching image URI to specific pin/popup pairs?
 
 function MapScreen({ navigation }) {
-  const [pins, setPins] = React.useState([]);
+  let [pins, setPins] = React.useState([]);
   const [isPressed, setIsPressed] = React.useState(false);
   const [modalVisible, setModalVisible] = React.useState(false);
 
   //await fetch
-  // const getPins = async () => {
-  //   try {
-  //     const response = await fetch('https://reactnative.dev/movies.json'); //IMPORTANT edit this link
-  //     const json = await response.json();
-  //     setPins(json.pins);
-  //   } catch (error) {
-  //     console.error(error);
-  //   } finally {
-  //     setLoading(false);
-  //   }
-  // }
+  const getPins = async () => {
+    try {
+      const response = await fetch('https://dropin-skateapp.herokuapp.com/getpins');
+      const locs = await response.json();
 
-  // React.useEffect(() => {
-  //   getPins();
-  // }, []);
+      locs.Pins.forEach(pin => {
+        pins.push({latitude: pin.Location.Latitude, longitude: pin.Location.Longitude})
+      });
+
+      
+
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  React.useEffect(() => {
+    getPins();
+  }, []);
 
   const culcLocation = {
     latitude: 33.7749,
@@ -184,6 +178,20 @@ function MapScreen({ navigation }) {
   const dropPin = (e) => { //handles dropping a pin
     if (isPressed) {
       setPins([...pins, e.nativeEvent.coordinate])
+
+    //POST pin coordinates to DB
+    fetch('https://dropin-skateapp.herokuapp.com/pushpin', {
+      method: 'POST',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        Latitude: e.nativeEvent.coordinate.latitude,
+        Longitude: e.nativeEvent.coordinate.longitude
+      })
+    });
+
       setIsPressed(false);
     }
   }
@@ -199,7 +207,7 @@ function MapScreen({ navigation }) {
       >
         {
           pins.map((pin, i) => (
-            <Marker coordinate={pin} key={i} onPress={() => setModalVisible(true)}>
+            <Marker coordinate={{latitude: pin.latitude, longitude: pin.longitude}} key={i} onPress={() => setModalVisible(true)}>
               <Pin />
             </Marker>
           ))
