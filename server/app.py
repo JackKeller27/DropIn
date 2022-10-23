@@ -36,9 +36,11 @@ def login():
         result = collection.find_one(query_login)
         print(requestContents)
         if result:
-            return "True"
+            resDict = {"Value" : "True"}
+            return resDict
         else:
-            return "False"
+            resDict = {"Value" : "False"}
+            return resDict
     else:
         print("error parsing json")
     return " "
