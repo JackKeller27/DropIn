@@ -16,8 +16,8 @@ class User:
         return self.create_document_entry()
     def create_document_entry(self):
         userStruct = {} 
-        userStruct['Username'] = self.username
-        userStruct['Password'] = self.password    
+        userStruct['Username'] = self.username["username"]
+        userStruct['Password'] = self.password["password"]    
         userStruct['Pins'] = self.pins
         return userStruct
     def create_login_query(self):
