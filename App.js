@@ -55,10 +55,6 @@ function LoginScreen({ navigation }) {
     }
   }
 
-  // React.useEffect(() => {
-  //   verifyUser();
-  // });
-
   return (
     <View
       style={styles.login}>
@@ -144,10 +140,12 @@ function MapScreen({ navigation }) {
   let [pins, setPins] = React.useState([]);
   const [isPressed, setIsPressed] = React.useState(false);
   const [modalVisible, setModalVisible] = React.useState(false);
+  const [load, setLoad] = React.useState(false)
 
   //await fetch
   const getPins = async () => {
     try {
+      setLoad(true)
       const response = await fetch('https://dropin-skateapp.herokuapp.com/getpins');
       const locs = await response.json();
 
@@ -160,13 +158,13 @@ function MapScreen({ navigation }) {
     } catch (error) {
       console.error(error);
     } finally {
-      setLoading(false);
+      setLoad(false);
     }
   }
 
   React.useEffect(() => {
     getPins();
-  }, []);
+  }, [pins]);
 
   const culcLocation = {
     latitude: 33.7749,
@@ -205,7 +203,7 @@ function MapScreen({ navigation }) {
         onPress={(e) => dropPin(e)}
         customMapStyle={mapStyle}
       >
-        {
+        {(load) ? <></> : 
           pins.map((pin, i) => (
             <Marker coordinate={{latitude: pin.latitude, longitude: pin.longitude}} key={i} onPress={() => setModalVisible(true)}>
               <Pin />
