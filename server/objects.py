@@ -57,15 +57,12 @@ class PinLocation:
         for key in jsonDoc:
             if key == "Latitude":
                 self.latitude = jsonDoc[key]
-            if key == "Latitude":
-                self.latitude = jsonDoc[key]
-            if key == "User": 
-                self.user = jsonDoc[key]
+            if key == "Longitude":
+                self.longitude = jsonDoc[key]
         return self.create_document_entry()
     def create_document_entry(self): 
         document = {}
         document['Location'] = {"Latitude" : self.latitude, "Longitude" : self.longitude}
-        document['User_Create'] = self.user
         return document
 
     
