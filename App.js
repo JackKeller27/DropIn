@@ -30,6 +30,7 @@ function HomeScreen({ navigation }) {
 function LoginScreen({ navigation }) {
   const [username, onChangeTextUsr] = React.useState(null);
   const [password, onChangeTextPsw] = React.useState(null);
+  const [isValid, setIsValid] = React.useState("False");
 
   const login = () => {
     //POST request
@@ -40,8 +41,8 @@ function LoginScreen({ navigation }) {
         'Content-Type': 'application/json'
       },
       body: JSON.stringify({
-        firstParam: { username },
-        secondParam: { password }
+        Username: { username },
+        Password: { password }
       })
     });
 
@@ -51,14 +52,21 @@ function LoginScreen({ navigation }) {
         const response = await fetch(
           'https://reactnative.dev/movies.json' //IMPORTANT edit this link
         );
-        const json = await response.json();
-        return json.user;
+        setIsValid(await response);
       } catch (error) {
         console.error(error);
       }
     };
 
-    navigation.navigate('Map')
+    useEffect(() => {
+      verifyUser();
+    });
+
+    if (isValid === "True") {
+      navigation.navigate('Map')
+    } else {
+      alert("User does not exist. Verify username and/or password, or sign up to create a new account!");
+    }
   }
 
   return (
@@ -104,12 +112,13 @@ function SignupScreen({ navigation }) {
         'Content-Type': 'application/json'
       },
       body: JSON.stringify({
-        firstParam: { username },
-        secondParam: { password }
+        Username: { username },
+        Password: { password }
       })
     });
 
-    navigation.navigate('Map')
+    alert("Success! Please proceed to login.")
+    navigation.navigate('Login')
   }
 
   return (
