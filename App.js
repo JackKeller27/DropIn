@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Button, Text, View, StyleSheet, TextInput, Dimensions, Image, Pressable } from 'react-native';
+import { Button, Text, View, StyleSheet, TextInput, Dimensions, Image, Pressable, Modal } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import MapView from 'react-native-maps';
@@ -7,6 +7,7 @@ import { Marker } from 'react-native-maps';
 import { PROVIDER_GOOGLE } from 'react-native-maps';
 import Pin from './Pin.js';
 import mapStyle from './mapStyle.json'
+import UploadImage from './UploadImage';
 
 //Home Screen
 
@@ -25,11 +26,12 @@ function HomeScreen({ navigation }) {
 }
 
 //Login Screen
-//**implement POST request
+//**implement POST request, change onPress
 
 function LoginScreen({ navigation }) {
   const [username, onChangeTextUsr] = React.useState(null);
   const [password, onChangeTextPsw] = React.useState(null);
+  const [isValid, setIsValid] = React.useState("False");
 
   const login = () => {
     //POST request
@@ -40,26 +42,33 @@ function LoginScreen({ navigation }) {
         'Content-Type': 'application/json'
       },
       body: JSON.stringify({
-        firstParam: { username },
-        secondParam: { password }
+        Username: { username },
+        Password: { password }
       })
     });
 
-    //await fetch
-    const verifyUser = async () => {
-      try {
-        const response = await fetch(
-          'https://reactnative.dev/movies.json' //IMPORTANT edit this link
-        );
-        const json = await response.json();
-        return json.user;
-      } catch (error) {
-        console.error(error);
-      }
-    };
-
-    navigation.navigate('Map')
+    if (isValid === "True") {
+      navigation.navigate('Map')
+    } else {
+      alert("Username/password does not exist!");
+    }
   }
+
+  //await fetch
+  const verifyUser = async () => {
+    try {
+      const response = await fetch(
+        'https://reactnative.dev/movies.json' //IMPORTANT edit this link
+      );
+      setIsValid(response);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  React.useEffect(() => {
+    verifyUser();
+  });
 
   return (
     <View
@@ -81,7 +90,8 @@ function LoginScreen({ navigation }) {
         placeholder="Password"
         secureTextEntry={true}
       />
-      <Pressable style={styles.buttonSignUp} onPress={() => login()}>
+      {/* <Pressable style={styles.buttonSignUp} onPress={() => login()}> */}
+      <Pressable style={styles.buttonSignUp} onPress={() => navigation.navigate('Map')}>
         <Text style={styles.buttonTextSignUp}>Let's Ride</Text>
       </Pressable>
     </View>
@@ -109,7 +119,8 @@ function SignupScreen({ navigation }) {
       })
     });
 
-    navigation.navigate('Map')
+    alert("Congrats, you did it!")
+    navigation.navigate('Login')
   }
 
   return (
@@ -144,23 +155,24 @@ function SignupScreen({ navigation }) {
 function MapScreen({ navigation }) {
   const [pins, setPins] = React.useState([]);
   const [isPressed, setIsPressed] = React.useState(false);
+  const [modalVisible, setModalVisible] = React.useState(false);
 
   //await fetch
-  const getPins = async () => {
-    try {
-      const response = await fetch('https://reactnative.dev/movies.json'); //IMPORTANT edit this link
-      const json = await response.json();
-      setPins(json.pins);
-    } catch (error) {
-      console.error(error);
-    } finally {
-      setLoading(false);
-    }
-  }
+  // const getPins = async () => {
+  //   try {
+  //     const response = await fetch('https://reactnative.dev/movies.json'); //IMPORTANT edit this link
+  //     const json = await response.json();
+  //     setPins(json.pins);
+  //   } catch (error) {
+  //     console.error(error);
+  //   } finally {
+  //     setLoading(false);
+  //   }
+  // }
 
-  useEffect(() => {
-    getPins();
-  }, []);
+  // React.useEffect(() => {
+  //   getPins();
+  // }, []);
 
   const culcLocation = {
     latitude: 33.7749,
@@ -186,9 +198,11 @@ function MapScreen({ navigation }) {
         customMapStyle={mapStyle}
       >
         {
-          pins.map((pin, i) => (<Marker coordinate={pin} key={i}>
-            <Pin />
-          </Marker>))
+          pins.map((pin, i) => (
+            <Marker coordinate={pin} key={i} onPress={() => setModalVisible(true)}>
+              <Pin />
+            </Marker>
+          ))
         }
       </MapView>
       <View
@@ -213,6 +227,34 @@ function MapScreen({ navigation }) {
           <Text style={styles.mapButtonText}>Place Pin</Text>
         </Pressable>
       </View>
+
+      <Modal //popup
+        animationType="slide"
+        transparent={true}
+        visible={modalVisible}
+        onRequestClose={() => {
+          setModalVisible(!modalVisible);
+        }}
+      >
+        <View style={styles.modalView}>
+          <Text style={styles.modalText}>Check out this spot!</Text>
+          <UploadImage/>
+          <View
+            style={{
+              position: 'absolute', //maintain absolute button position
+              top: '97%',
+              alignSelf: 'center'
+            }}
+          >
+            <Pressable
+              style={styles.exitModalButton}
+              onPress={() => setModalVisible(!modalVisible)}
+            >
+              <Text style={styles.mapButtonText}>Exit</Text>
+            </Pressable>
+          </View>
+        </View>
+      </Modal>
     </View>
   );
 }
@@ -356,6 +398,43 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     letterSpacing: 0.21,
     color: 'white',
+  },
+
+  modalView: {
+    marginTop: '25%',
+    marginLeft: '10%',
+    marginRight: '10%',
+    backgroundColor: "white",
+    borderRadius: 20,
+    padding: 20,
+    width: '75%',
+    height: '75%',
+    alignItems: "center",
+    justifyContent: "flex-start",
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
+    elevation: 5
+  },
+
+  modalText: {
+    marginBottom: 15,
+    textAlign: "center",
+    fontSize: 20,
+  },
+
+  exitModalButton: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingVertical: 6,
+    paddingHorizontal: 16,
+    borderRadius: 4,
+    elevation: 3,
+    backgroundColor: 'black',
   },
 })
 
