@@ -28,6 +28,8 @@ def login():
     requestContents = {}
     requestContents = request.get_json()
     if requestContents:
+        requestContents["Username"] = requestContents["Username"]["username"]
+        requestContents["Password"] = requestContents["Password"]["password"]
         userObj = obj.User("", "")
         document = userObj.parse_json_to_user_login(requestContents)
         query_login = userObj.create_login_query()
