@@ -32,6 +32,7 @@ def login():
         document = userObj.parse_json_to_user_login(requestContents)
         query_login = userObj.create_login_query()
         result = collection.find_one(query_login)
+        print(requestContents)
         if result:
             return "True"
         else:
