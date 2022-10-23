@@ -46,7 +46,6 @@ return (
     </View>
 );
 };
-    
 
 const imageUploaderStyles = StyleSheet.create({
     container: {
