@@ -260,7 +260,7 @@ matplotlib
 matplotlib-inline 
 
 mccabe
-mistune 
+
 
 mkl-fft
 mkl-random 
