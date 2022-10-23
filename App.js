@@ -26,7 +26,6 @@ function HomeScreen({ navigation }) {
 }
 
 //Login Screen
-//**implement POST request, change onPress
 
 function LoginScreen({ navigation }) {
   const [username, onChangeTextUsr] = React.useState(null);
@@ -35,7 +34,7 @@ function LoginScreen({ navigation }) {
 
   const login = () => {
     //POST request
-    fetch('https://mywebsite.com/endpoint/', { //IMPORTANT edit this link
+    fetch('https://dropin-skateapp.herokuapp.com/login', {
       method: 'POST',
       headers: {
         Accept: 'application/json',
@@ -58,7 +57,7 @@ function LoginScreen({ navigation }) {
   const verifyUser = async () => {
     try {
       const response = await fetch(
-        'https://reactnative.dev/movies.json' //IMPORTANT edit this link
+        'https://dropin-skateapp.herokuapp.com/login'
       );
       setIsValid(response);
     } catch (error) {
@@ -90,8 +89,8 @@ function LoginScreen({ navigation }) {
         placeholder="Password"
         secureTextEntry={true}
       />
-      {/* <Pressable style={styles.buttonSignUp} onPress={() => login()}> */}
-      <Pressable style={styles.buttonSignUp} onPress={() => navigation.navigate('Map')}>
+      <Pressable style={styles.buttonSignUp} onPress={() => login()}>
+      {/* <Pressable style={styles.buttonSignUp} onPress={() => navigation.navigate('Map')}> */}
         <Text style={styles.buttonTextSignUp}>Let's Ride</Text>
       </Pressable>
     </View>
@@ -99,7 +98,6 @@ function LoginScreen({ navigation }) {
 }
 
 //Signup Screen
-//**implement POST request
 
 function SignupScreen({ navigation }) {
   const [username, onChangeTextUsr] = React.useState(null);
@@ -107,7 +105,7 @@ function SignupScreen({ navigation }) {
 
   const signup = () => {
     //POST request
-    fetch('https://mywebsite.com/endpoint/', { //IMPORTANT edit this link
+    fetch('https://dropin-skateapp.herokuapp.com/signup', {
       method: 'POST',
       headers: {
         Accept: 'application/json',
@@ -158,21 +156,21 @@ function MapScreen({ navigation }) {
   const [modalVisible, setModalVisible] = React.useState(false);
 
   //await fetch
-  // const getPins = async () => {
-  //   try {
-  //     const response = await fetch('https://reactnative.dev/movies.json'); //IMPORTANT edit this link
-  //     const json = await response.json();
-  //     setPins(json.pins);
-  //   } catch (error) {
-  //     console.error(error);
-  //   } finally {
-  //     setLoading(false);
-  //   }
-  // }
+  const getPins = async () => {
+    try {
+      const response = await fetch('https://dropin-skateapp.herokuapp.com/getpins');
+      const json = await response.json();
+      setPins(json.pins);
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setLoading(false);
+    }
+  }
 
-  // React.useEffect(() => {
-  //   getPins();
-  // }, []);
+  React.useEffect(() => {
+    getPins();
+  }, []);
 
   const culcLocation = {
     latitude: 33.7749,
