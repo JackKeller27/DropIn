@@ -60,7 +60,7 @@ def pushpin():
 def getpins(): 
     responseContents = {} 
     responseContents['Pins'] = []
-    cursor = collection.find({}, {'_id': False})
+    cursor = geo_collection.find({}, {'_id': False})
     for item in cursor:
         responseContents['Pins'].append(item)
     return jsonify(responseContents)
