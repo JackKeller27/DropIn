@@ -48,8 +48,9 @@ def pushpin():
         document = locationObj.parse_json_to_location(requestContents)
         geo_collection.insert_one(document)
         query = {"Username": requestContents["Username"]}
-        collection.update_one(query, {$push: {"Pins": locationObj.parse_json_to_location(requestContents)})
-    else:t
+        update = {"$push": {"Pins": locationObj.parse_json_to_location(requestContents)}}
+        collection.update_one(query, update)
+    else:
         print("error parsing json")
         return "error"
     return "Location added" 
