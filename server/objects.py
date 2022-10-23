@@ -14,10 +14,23 @@ class User:
             if key == "Password":
                 self.password = jsonDoc[key]
         return self.create_document_entry()
+    def parse_json_to_user_login(self, jsonDoc):
+        for key in jsonDoc:
+            if key == "Username":
+                self.username = jsonDoc[key]
+            if key == "Password":
+                self.password = jsonDoc[key]
+        return self.create_document_entry_login()
     def create_document_entry(self):
         userStruct = {} 
         userStruct['Username'] = self.username["username"]
         userStruct['Password'] = self.password["password"]    
+        userStruct['Pins'] = self.pins
+        return userStruct
+    def create_document_entry_login(self):
+        userStruct = {} 
+        userStruct['Username'] = self.username
+        userStruct['Password'] = self.password    
         userStruct['Pins'] = self.pins
         return userStruct
     def create_login_query(self):

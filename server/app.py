@@ -29,7 +29,7 @@ def login():
     requestContents = request.get_json()
     if requestContents:
         userObj = obj.User("", "")
-        document = userObj.parse_json_to_user(requestContents)
+        document = userObj.parse_json_to_user_login(requestContents)
         query_login = userObj.create_login_query()
         result = collection.find_one(query_login)
         if result:
