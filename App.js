@@ -14,21 +14,52 @@ function HomeScreen({ navigation }) {
   return (
     <View style={styles.view}>
       <Image source={require('./assets/logo_ss.png')} style={styles.image} />
-    <Pressable style={styles.button} onPress={() => navigation.navigate('Login')}>
-      <Text style={styles.buttonText}>Login</Text>
-    </Pressable>
-    <Pressable style={styles.buttonSignUp} onPress={() => navigation.navigate('Signup')}>
-      <Text style={styles.buttonTextSignUp}>Sign Up</Text>
-    </Pressable>
+      <Pressable style={styles.button} onPress={() => navigation.navigate('Login')}>
+        <Text style={styles.buttonText}>Login</Text>
+      </Pressable>
+      <Pressable style={styles.buttonSignUp} onPress={() => navigation.navigate('Signup')}>
+        <Text style={styles.buttonTextSignUp}>Sign Up</Text>
+      </Pressable>
     </View>
   );
 }
 
 //Login Screen
+//**implement POST request
 
 function LoginScreen({ navigation }) {
   const [username, onChangeTextUsr] = React.useState(null);
   const [password, onChangeTextPsw] = React.useState(null);
+
+  const login = () => {
+    //POST request
+    fetch('https://mywebsite.com/endpoint/', { //IMPORTANT edit this link
+      method: 'POST',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        firstParam: { username },
+        secondParam: { password }
+      })
+    });
+
+    //await fetch
+    const verifyUser = async () => {
+      try {
+        const response = await fetch(
+          'https://reactnative.dev/movies.json' //IMPORTANT edit this link
+        );
+        const json = await response.json();
+        return json.user;
+      } catch (error) {
+        console.error(error);
+      }
+    };
+
+    navigation.navigate('Map')
+  }
 
   return (
     <View
@@ -50,16 +81,36 @@ function LoginScreen({ navigation }) {
         placeholder="Password"
         secureTextEntry={true}
       />
-    <Pressable style={styles.buttonSignUp} onPress={() => navigation.navigate('Map')}>
-      <Text style={styles.buttonTextSignUp}>Let's Ride</Text>
-    </Pressable>
+      <Pressable style={styles.buttonSignUp} onPress={() => login()}>
+        <Text style={styles.buttonTextSignUp}>Let's Ride</Text>
+      </Pressable>
     </View>
   );
 }
 
+//Signup Screen
+//**implement POST request
+
 function SignupScreen({ navigation }) {
   const [username, onChangeTextUsr] = React.useState(null);
   const [password, onChangeTextPsw] = React.useState(null);
+
+  const signup = () => {
+    //POST request
+    fetch('https://mywebsite.com/endpoint/', { //IMPORTANT edit this link
+      method: 'POST',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        firstParam: { username },
+        secondParam: { password }
+      })
+    });
+
+    navigation.navigate('Map')
+  }
 
   return (
     <View
@@ -73,30 +124,43 @@ function SignupScreen({ navigation }) {
         value={username}
         placeholder="Username"
       />
-        <TextInput
+      <TextInput
         style={styles.input}
         onChangeText={onChangeTextPsw}
         value={password}
         placeholder="Password"
-        secureTextEntry ={true}
+        secureTextEntry={true}
       />
-    <Pressable style={styles.buttonSignUp} onPress={() => navigation.navigate('Map')}>
-      <Text style={styles.buttonTextSignUp}>Drop In!</Text>
-    </Pressable>
+      <Pressable style={styles.buttonSignUp} onPress={() => signup()}>
+        <Text style={styles.buttonTextSignUp}>Drop In!</Text>
+      </Pressable>
     </View>
   );
 }
 
 //Map Screen
+//**implement fetch request
 
 function MapScreen({ navigation }) {
-  // const [pinCoord, setPinCoord] = React.useState(0);
   const [pins, setPins] = React.useState([]);
   const [isPressed, setIsPressed] = React.useState(false);
 
-  // const pin = {
-  //   coordinates: pinCoord
-  // }
+  //await fetch
+  const getPins = async () => {
+    try {
+      const response = await fetch('https://reactnative.dev/movies.json'); //IMPORTANT edit this link
+      const json = await response.json();
+      setPins(json.pins);
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  useEffect(() => {
+    getPins();
+  }, []);
 
   const culcLocation = {
     latitude: 33.7749,
