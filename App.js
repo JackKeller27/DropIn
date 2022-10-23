@@ -50,7 +50,7 @@ function LoginScreen({ navigation }) {
       if (text.Value === "True") {
         navigation.navigate('Map')
       } else {
-        alert(text.Value)
+        alert("Invalid username/pwd")
       }
     }
   }
