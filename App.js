@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Button, Text, View, StyleSheet, TextInput, Dimensions, Image, Pressable } from 'react-native';
+import { Button, Text, View, StyleSheet, TextInput, Dimensions, Image, Pressable, Modal } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import MapView from 'react-native-maps';
@@ -25,7 +25,7 @@ function HomeScreen({ navigation }) {
 }
 
 //Login Screen
-//**implement POST request
+//**implement POST request, change onPress
 
 function LoginScreen({ navigation }) {
   const [username, onChangeTextUsr] = React.useState(null);
@@ -89,7 +89,8 @@ function LoginScreen({ navigation }) {
         placeholder="Password"
         secureTextEntry={true}
       />
-      <Pressable style={styles.buttonSignUp} onPress={() => login()}>
+      {/* <Pressable style={styles.buttonSignUp} onPress={() => login()}> */}
+      <Pressable style={styles.buttonSignUp} onPress={() => navigation.navigate('Map')}>
         <Text style={styles.buttonTextSignUp}>Let's Ride</Text>
       </Pressable>
     </View>
@@ -153,23 +154,24 @@ function SignupScreen({ navigation }) {
 function MapScreen({ navigation }) {
   const [pins, setPins] = React.useState([]);
   const [isPressed, setIsPressed] = React.useState(false);
+  const [modalVisible, setModalVisible] = React.useState(false);
 
   //await fetch
-  const getPins = async () => {
-    try {
-      const response = await fetch('https://reactnative.dev/movies.json'); //IMPORTANT edit this link
-      const json = await response.json();
-      setPins(json.pins);
-    } catch (error) {
-      console.error(error);
-    } finally {
-      setLoading(false);
-    }
-  }
+  // const getPins = async () => {
+  //   try {
+  //     const response = await fetch('https://reactnative.dev/movies.json'); //IMPORTANT edit this link
+  //     const json = await response.json();
+  //     setPins(json.pins);
+  //   } catch (error) {
+  //     console.error(error);
+  //   } finally {
+  //     setLoading(false);
+  //   }
+  // }
 
-  useEffect(() => {
-    getPins();
-  }, []);
+  // React.useEffect(() => {
+  //   getPins();
+  // }, []);
 
   const culcLocation = {
     latitude: 33.7749,
@@ -195,9 +197,11 @@ function MapScreen({ navigation }) {
         customMapStyle={mapStyle}
       >
         {
-          pins.map((pin, i) => (<Marker coordinate={pin} key={i}>
-            <Pin />
-          </Marker>))
+          pins.map((pin, i) => (
+              <Marker coordinate={pin} key={i} onPress={() => setModalVisible(true)}>
+                <Pin />
+              </Marker>
+          ))
         }
       </MapView>
       <View
@@ -222,6 +226,29 @@ function MapScreen({ navigation }) {
           <Text style={styles.mapButtonText}>Place Pin</Text>
         </Pressable>
       </View>
+
+      <Modal //popup
+        animationType="slide"
+        transparent={true}
+        visible={modalVisible}
+        onRequestClose={() => {
+          Alert.alert("Modal has been closed.");
+          setModalVisible(!modalVisible);
+        }}
+      >
+        <View style={styles.container}>
+          <View style={styles.modalView}>
+            <Text style={styles.modalText}>Hello World!</Text>
+            <Pressable
+              style={styles.button}
+              onPress={() => setModalVisible(!modalVisible)}
+            >
+              <Text style={styles.textStyle}>Hide Modal</Text>
+            </Pressable>
+          </View>
+        </View>
+      </Modal>
+
     </View>
   );
 }
@@ -365,6 +392,31 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     letterSpacing: 0.21,
     color: 'white',
+  },
+
+  modalView: {
+    margin: 20,
+    backgroundColor: "white",
+    borderRadius: 20,
+    padding: 35,
+    alignItems: "center",
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
+    elevation: 5
+  },
+
+  modalText: {
+    marginBottom: 15,
+    textAlign: "center"
+  },
+
+  pinWrapper: {
+
   },
 })
 
