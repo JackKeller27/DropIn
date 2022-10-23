@@ -104,8 +104,8 @@ function SignupScreen({ navigation }) {
         'Content-Type': 'application/json'
       },
       body: JSON.stringify({
-        firstParam: { username },
-        secondParam: { password }
+        Username: { username },
+        Password: { password }
       })
     });
 
