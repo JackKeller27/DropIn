@@ -7,6 +7,7 @@ import { Marker } from 'react-native-maps';
 import { PROVIDER_GOOGLE } from 'react-native-maps';
 import Pin from './Pin.js';
 import mapStyle from './mapStyle.json'
+import UploadImage from './UploadImage';
 
 //Home Screen
 
@@ -237,6 +238,7 @@ function MapScreen({ navigation }) {
       >
         <View style={styles.modalView}>
           <Text style={styles.modalText}>Check out this spot!</Text>
+          <UploadImage/>
           <View
             style={{
               position: 'absolute', //maintain absolute button position
