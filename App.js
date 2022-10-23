@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Button, Text, View, StyleSheet, TextInput, Dimensions, Image, Pressable, Modal } from 'react-native';
+import { Text, View, StyleSheet, TextInput, Dimensions, Image, Pressable, Modal } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import MapView from 'react-native-maps';
@@ -32,9 +32,9 @@ function LoginScreen({ navigation }) {
   const [password, onChangeTextPsw] = React.useState(null);
   const [isValid, setIsValid] = React.useState("False");
 
-  const login = () => {
+  const login = async () => {
     //POST request
-    fetch('https://dropin-skateapp.herokuapp.com/login', {
+    const response = await fetch('https://dropin-skateapp.herokuapp.com/login', {
       method: 'POST',
       headers: {
         Accept: 'application/json',
@@ -45,29 +45,19 @@ function LoginScreen({ navigation }) {
         Password: { password }
       })
     });
-
-    if (isValid === "True") {
-      navigation.navigate('Map')
-    } else {
-      alert("Username/password does not exist!");
+    if (response.ok) {
+      let text = await response.json()
+      if (text.Value === "True") {
+        navigation.navigate('Map')
+      } else {
+        alert(text.Value)
+      }
     }
   }
 
-  //await fetch
-  const verifyUser = async () => {
-    try {
-      const response = await fetch(
-        'https://dropin-skateapp.herokuapp.com/login'
-      );
-      setIsValid(response);
-    } catch (error) {
-      console.error(error);
-    }
-  };
-
-  React.useEffect(() => {
-    verifyUser();
-  });
+  // React.useEffect(() => {
+  //   verifyUser();
+  // });
 
   return (
     <View
@@ -104,7 +94,7 @@ function SignupScreen({ navigation }) {
   const [password, onChangeTextPsw] = React.useState(null);
 
   const signup = () => {
-    //POST request
+    //POST username and password to DB
     fetch('https://dropin-skateapp.herokuapp.com/signup', {
       method: 'POST',
       headers: {
@@ -148,7 +138,7 @@ function SignupScreen({ navigation }) {
 }
 
 //Map Screen
-//**implement fetch request
+//implement integrating pins with DB, attaching image URI to specific pin/popup pairs?
 
 function MapScreen({ navigation }) {
   const [pins, setPins] = React.useState([]);
@@ -156,21 +146,21 @@ function MapScreen({ navigation }) {
   const [modalVisible, setModalVisible] = React.useState(false);
 
   //await fetch
-  const getPins = async () => {
-    try {
-      const response = await fetch('https://dropin-skateapp.herokuapp.com/getpins');
-      const json = await response.json();
-      setPins(json.pins);
-    } catch (error) {
-      console.error(error);
-    } finally {
-      setLoading(false);
-    }
-  }
+  // const getPins = async () => {
+  //   try {
+  //     const response = await fetch('https://dropin-skateapp.herokuapp.com/getpins');
+  //     const json = await response.json();
+  //     setPins(json.pins);
+  //   } catch (error) {
+  //     console.error(error);
+  //   } finally {
+  //     setLoading(false);
+  //   }
+  // }
 
-  React.useEffect(() => {
-    getPins();
-  }, []);
+  // React.useEffect(() => {
+  //   getPins();
+  // }, []);
 
   const culcLocation = {
     latitude: 33.7749,
@@ -182,6 +172,20 @@ function MapScreen({ navigation }) {
   const dropPin = (e) => { //handles dropping a pin
     if (isPressed) {
       setPins([...pins, e.nativeEvent.coordinate])
+
+    //POST pin coordinates to DB
+    // fetch('https://dropin-skateapp.herokuapp.com/signup', {
+    //   method: 'POST',
+    //   headers: {
+    //     Accept: 'application/json',
+    //     'Content-Type': 'application/json'
+    //   },
+    //   body: JSON.stringify({
+    //     Latitude: e.nativeEvent.coordinate.latitude,
+    //     Longitude: e.nativeEvent.coordinate.longitude
+    //   })
+    // });
+
       setIsPressed(false);
     }
   }
