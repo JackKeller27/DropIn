@@ -198,9 +198,9 @@ function MapScreen({ navigation }) {
       >
         {
           pins.map((pin, i) => (
-              <Marker coordinate={pin} key={i} onPress={() => setModalVisible(true)}>
-                <Pin />
-              </Marker>
+            <Marker coordinate={pin} key={i} onPress={() => setModalVisible(true)}>
+              <Pin />
+            </Marker>
           ))
         }
       </MapView>
@@ -232,23 +232,27 @@ function MapScreen({ navigation }) {
         transparent={true}
         visible={modalVisible}
         onRequestClose={() => {
-          Alert.alert("Modal has been closed.");
           setModalVisible(!modalVisible);
         }}
       >
-        <View style={styles.container}>
-          <View style={styles.modalView}>
-            <Text style={styles.modalText}>Hello World!</Text>
+        <View style={styles.modalView}>
+          <Text style={styles.modalText}>Check out this spot!</Text>
+          <View
+            style={{
+              position: 'absolute', //maintain absolute button position
+              top: '97%',
+              alignSelf: 'center'
+            }}
+          >
             <Pressable
-              style={styles.button}
+              style={styles.exitModalButton}
               onPress={() => setModalVisible(!modalVisible)}
             >
-              <Text style={styles.textStyle}>Hide Modal</Text>
+              <Text style={styles.mapButtonText}>Exit</Text>
             </Pressable>
           </View>
         </View>
       </Modal>
-
     </View>
   );
 }
@@ -395,11 +399,16 @@ const styles = StyleSheet.create({
   },
 
   modalView: {
-    margin: 20,
+    marginTop: '25%',
+    marginLeft: '10%',
+    marginRight: '10%',
     backgroundColor: "white",
     borderRadius: 20,
-    padding: 35,
+    padding: 20,
+    width: '75%',
+    height: '75%',
     alignItems: "center",
+    justifyContent: "flex-start",
     shadowColor: "#000",
     shadowOffset: {
       width: 0,
@@ -412,11 +421,18 @@ const styles = StyleSheet.create({
 
   modalText: {
     marginBottom: 15,
-    textAlign: "center"
+    textAlign: "center",
+    fontSize: 20,
   },
 
-  pinWrapper: {
-
+  exitModalButton: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingVertical: 6,
+    paddingHorizontal: 16,
+    borderRadius: 4,
+    elevation: 3,
+    backgroundColor: 'black',
   },
 })
 
