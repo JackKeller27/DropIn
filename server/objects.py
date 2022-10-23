@@ -66,5 +66,6 @@ class PinLocation:
         document = {}
         document['Location'] = {"Latitude" : self.latitude, "Longitude" : self.longitude}
         document['User_Create'] = self.user
+        return document
 
     
