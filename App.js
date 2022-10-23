@@ -46,28 +46,28 @@ function LoginScreen({ navigation }) {
       })
     });
 
-    //await fetch
-    const verifyUser = async () => {
-      try {
-        const response = await fetch(
-          'https://reactnative.dev/movies.json' //IMPORTANT edit this link
-        );
-        setIsValid(await response);
-      } catch (error) {
-        console.error(error);
-      }
-    };
-
-    useEffect(() => {
-      verifyUser();
-    });
-
     if (isValid === "True") {
       navigation.navigate('Map')
     } else {
-      alert("User does not exist. Verify username and/or password, or sign up to create a new account!");
+      alert("Username/password does not exist!");
     }
   }
+
+  //await fetch
+  const verifyUser = async () => {
+    try {
+      const response = await fetch(
+        'https://reactnative.dev/movies.json' //IMPORTANT edit this link
+      );
+      setIsValid(response);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  React.useEffect(() => {
+    verifyUser();
+  });
 
   return (
     <View
@@ -117,7 +117,7 @@ function SignupScreen({ navigation }) {
       })
     });
 
-    alert("Success! Please proceed to login.")
+    alert("Congrats, you did it!")
     navigation.navigate('Login')
   }
 
