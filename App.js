@@ -138,7 +138,7 @@ function SignupScreen({ navigation }) {
 }
 
 //Map Screen
-//implement integrating pins with DB, attaching image URI to specific pin/popup pairs?
+//attaching image URI to specific pin/popup pairs?
 
 function MapScreen({ navigation }) {
   let [pins, setPins] = React.useState([]);
